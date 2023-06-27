@@ -121,7 +121,10 @@ def get_download_links_from_huggingface(model, branch):
     is_lora = False
     while True:
         content = requests.get(f"{base}{page}{cursor.decode()}").content
-
+        if cursor:
+            content = requests.get(f"{base}{page}{cursor.decode()}").content
+        else:
+            content = requests.get(f"{base}/api/models/{model}/tree/{branch}").content
         dict = json.loads(content)
         if len(dict) == 0:
             break
